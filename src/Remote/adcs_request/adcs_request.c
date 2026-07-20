@@ -613,7 +613,10 @@ HRESULT adcs_request(LPCWSTR lpswzCA, LPCWSTR lpswzTemplate, LPCWSTR lpswzSubjec
 
 	// Initialize COM
 	hr = OLE32$CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-	CHECK_RETURN_FAIL("CoInitializeEx", hr);
+	if (FAILED(hr) && hr != RPC_E_CHANGED_MODE)
+	{
+		CHECK_RETURN_FAIL("CoInitializeEx", hr);
+	}
 
 	// Create the private key
 	hr = _adcs_request_CreatePrivateKey(bMachine, &pPrivateKey);
